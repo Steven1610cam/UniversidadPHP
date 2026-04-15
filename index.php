@@ -2,24 +2,32 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+use App\Domain\Entity\Universidad;
 use App\Infrastructure\Persistence\MySQLUniversidadRepository;
-use App\Application\UseCase\GetAllUniversidadesUseCase;
+use App\Application\UseCase\UpdateUniversidadUseCase;
 
-// conexión
 $conn = new PDO("mysql:host=127.0.0.1;dbname=universidad_db", "root", "6860179");
 
-// repo
 $repo = new MySQLUniversidadRepository($conn);
 
-// use case
-$useCase = new GetAllUniversidadesUseCase($repo);
+$useCase = new UpdateUniversidadUseCase($repo);
 
-// ejecutar
-$universidades = $useCase->execute();
+// ID existente
+$id = 1;
 
-// mostrar
-echo "<h2>Lista de Universidades</h2>";
+$uni = new Universidad(
+    "Universidad Actualizada",
+    "Privada",
+    "https://actualizada.edu.co",
+    "Nuevo Rector",
+    "nuevo@correo.com",
+    "Cerrado",
+    "3111111111",
+    "Barranquilla",
+    40,
+    10
+);
 
-foreach ($universidades as $u) {
-    echo $u['nombre'] . " - " . $u['ciudad'] . "<br>";
-}
+$result = $useCase->execute($id, $uni);
+
+echo $result ? "Actualizado" : "Error";

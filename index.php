@@ -31,7 +31,10 @@ if ($action === 'login') {
             header("Location: index.php?action=dashboard");
             exit;
         } else {
-            echo "Credenciales incorrectas";
+            $_SESSION['error'] = "Credenciales incorrectas";
+
+            header("Location: index.php?action=login");
+            exit;
         }
 
     } else {
@@ -49,7 +52,17 @@ elseif ($action === 'recover') {
 
         $ok = $useCase->execute($_POST['email'], $_POST['password']);
 
-        echo $ok ? "Contraseña actualizada" : "Usuario no encontrado";
+        if ($ok) {
+            $_SESSION['success'] = "Contraseña actualizada correctamente";
+
+            header("Location: index.php?action=login");
+            exit;
+        } else {
+            $_SESSION['error'] = "Usuario no encontrado";
+
+            header("Location: index.php?action=recover");
+            exit;
+        }
 
     } else {
         include __DIR__ . '/views/recover.php';

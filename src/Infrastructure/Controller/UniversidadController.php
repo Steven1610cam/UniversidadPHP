@@ -58,7 +58,10 @@ class UniversidadController
         $useCase = new DeleteUniversidadUseCase($this->repo);
         $useCase->execute($id);
 
-        echo "Eliminado";
+        $_SESSION['success'] = "Universidad eliminada con éxito";
+
+        header("Location: index.php?action=dashboard");
+        exit;
     }
 
     public function update()
@@ -81,6 +84,9 @@ class UniversidadController
         $useCase = new UpdateUniversidadUseCase($this->repo);
         $useCase->execute($id, $uni);
 
-        echo "Actualizado";
+        $_SESSION['success'] = "Universidad actualizada con éxito";
+
+        header("Location: index.php?action=dashboard");
+        exit;
     }
 }

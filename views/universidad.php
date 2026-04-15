@@ -6,7 +6,6 @@ use App\Infrastructure\Controller\UniversidadController;
 
 $controller = new UniversidadController();
 
-// manejar acciones
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($_POST['action'] === 'create') {
         $controller->create();
@@ -24,41 +23,122 @@ $universidades = (new App\Application\UseCase\GetAllUniversidadesUseCase(
 <html>
 <head>
     <title>Universidades</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="bg-light">
 
-<h1>CRUD Universidades</h1>
+<div class="container mt-5">
 
-<h2>Crear Universidad</h2>
+    <?php if (isset($_SESSION['success'])): ?>
+        <div class="alert alert-success">
+            <?= $_SESSION['success'] ?>
+        </div>
+        <?php unset($_SESSION['success']); ?>
+    <?php endif; ?>
 
-<form method="POST">
-    <input type="hidden" name="action" value="create">
+    <h1 class="text-center mb-4">Gestión de Universidades</h1>
 
-    <input type="text" name="nombre" placeholder="Nombre"><br>
-    <input type="text" name="categoria" placeholder="Categoria"><br>
-    <input type="text" name="web" placeholder="Web"><br>
-    <input type="text" name="rector" placeholder="Rector"><br>
-    <input type="email" name="email" placeholder="Email"><br>
-    <input type="text" name="acceso" placeholder="Acceso"><br>
-    <input type="text" name="telefono" placeholder="Telefono"><br>
-    <input type="text" name="ciudad" placeholder="Ciudad"><br>
-    <input type="number" name="numeroCarreras" placeholder="Numero Carreras"><br>
-    <input type="number" name="numSedes" placeholder="Numero Sedes"><br>
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Crear Universidad
+        </div>
+        <div class="card-body">
 
-    <button type="submit">Guardar</button>
-</form>
+            <form method="POST" class="row g-3">
+                <input type="hidden" name="action" value="create">
 
-<hr>
+                <div class="col-md-6">
+                    <input class="form-control" name="acceso" placeholder="Acceso (Abierto/Cerrado)">
+                </div>
 
-<h2>Lista de Universidades</h2>
+                <div class="col-md-6">
+                    <input class="form-control" name="nombre" placeholder="Nombre" required>
+                </div>
 
-<?php foreach ($universidades as $u): ?>
-    <div>
-        <strong><?= $u['nombre'] ?></strong> - <?= $u['ciudad'] ?>
+                <div class="col-md-6">
+                    <input class="form-control" name="categoria" placeholder="Categoría">
+                </div>
 
-        <a href="?action=delete&id=<?= $u['id'] ?>">Eliminar</a>
+                <div class="col-md-6">
+                    <input class="form-control" name="web" placeholder="Web">
+                </div>
+
+                <div class="col-md-6">
+                    <input class="form-control" name="rector" placeholder="Rector">
+                </div>
+
+                <div class="col-md-6">
+                    <input class="form-control" type="email" name="email" placeholder="Email">
+                </div>
+
+                <div class="col-md-6">
+                    <input class="form-control" name="telefono" placeholder="Teléfono">
+                </div>
+
+                <div class="col-md-6">
+                    <input class="form-control" name="ciudad" placeholder="Ciudad">
+                </div>
+
+                <div class="col-md-3">
+                    <input class="form-control" type="number" name="numeroCarreras" placeholder="Carreras">
+                </div>
+
+                <div class="col-md-3">
+                    <input class="form-control" type="number" name="numSedes" placeholder="Sedes">
+                </div>
+
+                <div class="col-md-12 text-end">
+                    <button class="btn btn-success">Guardar</button>
+                </div>
+            </form>
+
+        </div>
     </div>
-<?php endforeach; ?>
+
+    <div class="card">
+        <div class="card-header bg-dark text-white">
+            Lista de Universidades
+        </div>
+        <div class="card-body">
+
+            <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Ciudad</th>
+                        <th>Categoría</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                <?php foreach ($universidades as $u): ?>
+                    <tr>
+                        <td><?= $u['nombre'] ?></td>
+                        <td><?= $u['ciudad'] ?></td>
+                        <td><?= $u['categoria'] ?></td>
+                        <td>
+                            <a class="btn btn-warning btn-sm"
+                            href="?action=edit&id=<?= $u['id'] ?>">
+                            Editar
+                            </a>
+                            
+                            <a class="btn btn-danger btn-sm"
+                                href="?action=delete&id=<?= $u['id'] ?>"
+                                onclick="return confirm('¿Seguro que quieres eliminar?')">
+                                Eliminar
+                            </a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</div>
 
 </body>
 </html>

@@ -2,18 +2,26 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-use App\Infrastructure\Persistence\MySQLUniversidadRepository;
-use App\Application\UseCase\DeleteUniversidadUseCase;
+use App\Infrastructure\Controller\UniversidadController;
 
-$conn = new PDO("mysql:host=127.0.0.1;dbname=universidad_db", "root", "6860179");
+$controller = new UniversidadController();
 
-$repo = new MySQLUniversidadRepository($conn);
+$action = $_GET['action'] ?? 'list';
 
-$useCase = new DeleteUniversidadUseCase($repo);
+switch ($action) {
+    case 'create':
+        $controller->create();
+        break;
 
-//ID a eliminar
-$id = 1;
+    case 'delete':
+        $controller->delete();
+        break;
 
-$result = $useCase->execute($id);
+    case 'update':
+        $controller->update();
+        break;
 
-echo $result ? "Eliminado" : "Error";
+    default:
+        $controller->list();
+        break;
+}

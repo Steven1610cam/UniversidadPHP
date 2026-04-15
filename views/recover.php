@@ -13,8 +13,7 @@
 
         <form method="POST">
             <input class="form-control mb-2" type="email" name="email" placeholder="Email" required>
-            <input class="form-control mb-3" type="password" name="password" placeholder="Nueva contraseña" required>
-
+            
             <button class="btn btn-warning w-100">Actualizar</button>
         </form>
     </div>

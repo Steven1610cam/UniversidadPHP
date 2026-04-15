@@ -47,25 +47,37 @@ elseif ($action === 'recover') {
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-        $repo = new MySQLUserRepository($conn);
-        $useCase = new RecoverPasswordUseCase($repo);
+        $email = $_POST['email'];
 
-        $ok = $useCase->execute($_POST['email'], $_POST['password']);
+        $link = "localhost//universidad/index.php?action=reset&email=" . urlencode($email);
 
-        if ($ok) {
-            $_SESSION['success'] = "Contraseña actualizada correctamente";
+        $_SESSION['success'] = "Enlace de recuperación generado 🔗";
 
-            header("Location: index.php?action=login");
-            exit;
-        } else {
-            $_SESSION['error'] = "Usuario no encontrado";
-
-            header("Location: index.php?action=recover");
-            exit;
-        }
+        echo "<div class='container mt-5'>";
+        echo "<p>Simulación de correo enviado:</p>";
+        echo "<a href='$link'>$link</a>";
+        echo "</div>";
 
     } else {
         include __DIR__ . '/views/recover.php';
+    }
+}
+
+elseif ($action === 'reset') {
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+        $repo = new MySQLUserRepository($conn);
+
+        $repo->updatePassword($_POST['email'], $_POST['password']);
+
+        $_SESSION['success'] = "Contraseña actualizada correctamente 🔐";
+
+        header("Location: index.php?action=login");
+        exit;
+
+    } else {
+        include __DIR__ . '/views/reset.php';
     }
 }
 

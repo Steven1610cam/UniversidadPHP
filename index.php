@@ -2,31 +2,24 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-use App\Domain\Entity\Universidad;
 use App\Infrastructure\Persistence\MySQLUniversidadRepository;
-use App\Application\UseCase\CreateUniversidadUseCase;
+use App\Application\UseCase\GetAllUniversidadesUseCase;
 
+// conexión
 $conn = new PDO("mysql:host=127.0.0.1;dbname=universidad_db", "root", "6860179");
 
+// repo
 $repo = new MySQLUniversidadRepository($conn);
 
-// Use Case
-$useCase = new CreateUniversidadUseCase($repo);
+// use case
+$useCase = new GetAllUniversidadesUseCase($repo);
 
-$uni = new Universidad(
-    "Uni Caribe",
-    "Privada",
-    "https://caribe.edu.co",
-    "Rector Caribe",
-    "info@caribe.edu.co",
-    "Abierto",
-    "3011111111",
-    "Barranquilla",
-    15,
-    3
-);
+// ejecutar
+$universidades = $useCase->execute();
 
-// ejecutar caso de uso
-$result = $useCase->execute($uni);
+// mostrar
+echo "<h2>Lista de Universidades</h2>";
 
-echo $result ? "Guardado con UseCase" : "Error";
+foreach ($universidades as $u) {
+    echo $u['nombre'] . " - " . $u['ciudad'] . "<br>";
+}

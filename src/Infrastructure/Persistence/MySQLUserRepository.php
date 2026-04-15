@@ -20,4 +20,10 @@ class MySQLUserRepository implements UserRepository
         $stmt->execute([$email]);
         return $stmt->fetch();
     }
+
+    public function updatePassword($email, $password)
+    {
+        $stmt = $this->conn->prepare("UPDATE users SET password=? WHERE email=?");
+        return $stmt->execute([$password, $email]);
+    }       
 }

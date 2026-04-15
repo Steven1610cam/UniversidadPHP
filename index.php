@@ -4,38 +4,29 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use App\Domain\Entity\Universidad;
 use App\Infrastructure\Persistence\MySQLUniversidadRepository;
-//solucion insert multiple
-if (!isset($_GET['test'])) {
-    echo "Usa ?test=1 en la URL";
-    exit;
-}
+use App\Application\UseCase\CreateUniversidadUseCase;
 
-
-// conexión
 $conn = new PDO("mysql:host=127.0.0.1;dbname=universidad_db", "root", "6860179");
 
-// repositorio
 $repo = new MySQLUniversidadRepository($conn);
 
-// entidad
+// Use Case
+$useCase = new CreateUniversidadUseCase($repo);
+
 $uni = new Universidad(
-    "Universidad del Atlántico",
-    "Pública",
-    "https://www.uniatlantico.edu.co",
-    "Rector Ejemplo",
-    "info@uniatlantico.edu.co",
+    "Uni Caribe",
+    "Privada",
+    "https://caribe.edu.co",
+    "Rector Caribe",
+    "info@caribe.edu.co",
     "Abierto",
-    "3001234567",
+    "3011111111",
     "Barranquilla",
-    30,
-    5
+    15,
+    3
 );
 
-// guardar
-$result = $repo->save($uni);
+// ejecutar caso de uso
+$result = $useCase->execute($uni);
 
-if ($result) {
-    echo "Universidad guardada";
-} else {
-    echo "Error al guardar";
-}
+echo $result ? "Guardado con UseCase" : "Error";

@@ -51,7 +51,7 @@ elseif ($action === 'recover') {
 
         $link = "localhost//universidad/index.php?action=reset&email=" . urlencode($email);
 
-        $_SESSION['success'] = "Enlace de recuperación generado 🔗";
+        $_SESSION['success'] = "Enlace de recuperación generado";
 
         echo "<div class='container mt-5'>";
         echo "<p>Simulación de correo enviado:</p>";
@@ -71,7 +71,7 @@ elseif ($action === 'reset') {
 
         $repo->updatePassword($_POST['email'], $_POST['password']);
 
-        $_SESSION['success'] = "Contraseña actualizada correctamente 🔐";
+        $_SESSION['success'] = "Contraseña actualizada correctamente";
 
         header("Location: index.php?action=login");
         exit;
